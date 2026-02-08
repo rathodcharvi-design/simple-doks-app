@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simple-doks-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: simple-doks-app
+  template:
+    metadata:
+      labels:
+        app: simple-doks-app
+    spec:
+      containers:
+      - name: app
+        image: registry.digitalocean.com/simple-doks-sfo-registry/simple-doks-app:1.1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: simple-doks-app-svc
+spec:
+  type: LoadBalancer
+  selector:
+    app: simple-doks-app
+  ports:
+  - port: 80
+    targetPort: 8080
+
